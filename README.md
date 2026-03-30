@@ -18,7 +18,7 @@ Dropper para Linux escrito en Python 3. Descarga y ejecuta un payload de forma d
 ├── payload.py # Descarga, extracción y ejecución del payload
 ├── builder # Script de compilación y ofuscación
 └── dist/
-└── dropper_bin # Binario generado (ejemplo)
+    └── dropper_bin # Binario generado (ejemplo)
 ```
 
 ## Uso
