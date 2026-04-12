@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 from killswitch import check_killswitch
 from vm_detect  import is_vm
